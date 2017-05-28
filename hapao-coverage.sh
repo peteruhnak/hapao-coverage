@@ -12,32 +12,40 @@ copy_image() {
 }
 
 run_coverage() {
-	$SMALLTALK_VM $COVERAGE_IMAGE eval "|file ci|
+	$SMALLTALK_VM $COVERAGE_IMAGE eval "
+|buildDir coverageDir confFile conf runCoverage pkgsMatching|
 Gofer new smalltalkhubUser: 'ObjectProfile' project: 'Spy2'; configurationOf: 'Spy2'; loadBleedingEdge.
 buildDir := '$TRAVIS_BUILD_DIR' asFileReference.
 coverageDir := buildDir / 'coverage-result'.
 confFile := buildDir / '.smalltalk.ston'.
 conf := SmalltalkCISpec fromStream: confFile readStream.
-conf coverageDictionary at: #packages ifPresent: [ :pkgs |
-	pkgs do: [ :pkgName | |coverage view pkgDir|
-		coverage := Hapao2 runTestsForPackageNamed: pkgName.
-		view := RTView new.
-		coverage visualizeOn: view.
-		pkgDir := coverageDir / pkgName.
-		pkgDir ensureCreateDirectory.
-		RTHTML5Exporter new
-			directory: pkgDir;
-			export: view.
+
+runCoverage := [ :runName :pkgs | |coverage view pkgDir|
+	coverage := Hapao2 runTestsForPackages: pkgs.
+	view := RTView new.
+	coverage visualizeOn: view.
+	pkgDir := coverageDir / runName.
+	pkgDir ensureCreateDirectory.
+	RTHTML5Exporter new
+		directory: pkgDir;
+		export: view.
+].
+
+pkgsMatching := [ :regex |
+	RPackage organizer packages select: [ :each | each name matchesRegex: regex ].
+].
+
+conf coverageDictionary at: #packages ifPresent: [ :pkgNames |
+	pkgNames do: [ :pkgName |
+		(pkgsMatching value: pkgName) do: [ :pkg | runCoverage value: pkg name value: { pkg } ].
 	].
-	true ifTrue: [ |coverage view allPkgsDir|
-		coverage := Hapao2 runTestsForPackagesNamed: pkgs.
-		view := RTView new.
-		coverage visualizeOn: view.
-		allPkgsDir := coverageDir / 'all'.
-		allPkgsDir ensureCreateDirectory.
-		RTHTML5Exporter new
-			directory: allPkgsDir;
-			export: view.
+	true ifTrue: [ |pkgs|
+		pkgs := OrderedCollection new.
+		pkgNames do: [ :pkgName |
+			pkgs addAll: (pkgsMatching value: pkgName)
+		].
+		pkgs removeDuplicates.
+		runCoverage value: 'all' value: pkgs
 	]
 ].
 "
