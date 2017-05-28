@@ -76,7 +76,7 @@ before_script:
 
 after_success:
   - wget -O- https://raw.githubusercontent.com/peteruhnak/hapao-coverage/master/hapao-coverage.sh | bash
- 
+
 deploy:
   provider: s3
   access_key_id:
@@ -92,3 +92,11 @@ deploy:
     branch: master
 ```
 
+(powershell)
+
+```ps
+Set-PSReadlineOption -HistorySaveStyle SaveNothing
+configure-hapao.ps1 -Repository Z:\Path\To\Repo -AccessKey KEY -SecretKey KEY
+```
+
+the script will ask interactively if the options were not provided
