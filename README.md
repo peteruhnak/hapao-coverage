@@ -54,6 +54,13 @@ for project `openponk/xmi` and build `20` this will create a folder `openponk/xm
 upload-dir: $TRAVIS_REPO_SLUG/$TRAVIS_BUILD_NUMBER
 ```
 
+For matrix builds using `$TRAVIS_JOB_NUMBER` is preferable, as all jobs share the same build number
+
+e.g. `openponk/xmi/14.1` and `openponk/xmi/14.2`
+
+```yaml
+upload-dir: $TRAVIS_REPO_SLUG/$TRAVIS_JOB_NUMBER
+```
 
 ## Example .travis.yml
 
