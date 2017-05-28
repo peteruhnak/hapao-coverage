@@ -29,6 +29,16 @@ conf coverageDictionary at: #packages ifPresent: [ :pkgs |
 			directory: pkgDir;
 			export: view.
 	].
+	true ifTrue: [ |coverage view allPkgsDir|
+		coverage := Hapao2 runTestsForPackagesNamed: pkgs.
+		view := RTView new.
+		coverage visualizeOn: view.
+		allPkgsDir := coverageDir / 'all'.
+		allPkgsDir ensureCreateDirectory.
+		RTHTML5Exporter new
+			directory: allPkgsDir;
+			export: view.
+	]
 ].
 "
 }
