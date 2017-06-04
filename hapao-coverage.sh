@@ -6,6 +6,7 @@ SMALLTALK_VM="$(find $SMALLTALK_CI_VMS -name pharo -type f -executable | head -n
 
 readonly COVERAGE_DIR=$(readlink -m $(dirname $SMALLTALK_CI_IMAGE))
 readonly COVERAGE_IMAGE=$COVERAGE_DIR/coverage.image
+readonly BUILD_DIR=${TRAVIS_BUILD_DIR:-$CI_PROJECT_DIR}
 
 copy_image() {
 	$SMALLTALK_VM $SMALLTALK_CI_IMAGE save coverage
@@ -15,7 +16,7 @@ run_coverage() {
 	$SMALLTALK_VM $COVERAGE_IMAGE eval "
 |buildDir coverageDir confFile conf runCoverage pkgsMatching|
 Gofer new smalltalkhubUser: 'ObjectProfile' project: 'Spy2'; configurationOf: 'Spy2'; loadBleedingEdge.
-buildDir := '$TRAVIS_BUILD_DIR' asFileReference.
+buildDir := '$BUILD_DIR' asFileReference.
 coverageDir := buildDir / 'coverage-result'.
 confFile := buildDir / '.smalltalk.ston'.
 conf := SmalltalkCISpec fromStream: confFile readStream.
