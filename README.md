@@ -62,7 +62,7 @@ e.g. `openponk/xmi/14.1` and `openponk/xmi/14.2`
 upload-dir: $TRAVIS_REPO_SLUG/$TRAVIS_JOB_NUMBER
 ```
 
-## Example .travis.yml
+## Example .travis.yml (Travis CI)
 
 ```yaml
 language: smalltalk
@@ -97,6 +97,43 @@ deploy:
   skip-cleanup: true
   on:
     branch: master
+```
+
+## Example .gitlab-ci.yml (GitLab Runner)
+
+```yaml
+variables:
+  DEFAULT_DEPS: "libc6:i386 libuuid1:i386 libfreetype6:i386 libssl1.0.0:i386"
+  PHARO_DEPS: "$DEFAULT_DEPS libcairo2:i386"
+
+before_script:
+  # Set 32bit and update apt
+  - sudo dpkg --add-architecture i386
+  - sudo apt-get update -yqq
+  # Install dependencies
+  - echo "Installing dependencies"
+  - sudo apt-get install -y --no-install-recommends $PHARO_DEPS
+  # Install smalltalkCI
+  - pushd $HOME > /dev/null
+  - echo 'Downloading and extracting smalltalkCI'
+  - wget -q -O smalltalkCI.zip https://github.com/hpi-swa/smalltalkCI/archive/master.zip
+  - unzip -q -o smalltalkCI.zip
+  - pushd smalltalkCI-* > /dev/null
+  - source env_vars
+  - popd > /dev/null
+  - popd > /dev/null
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - $SMALLTALK_CI_HOME/run.sh -s "Pharo-6.0"
+
+deploy:
+
 ```
 
 (powershell)
