@@ -143,4 +143,10 @@ Set-PSReadlineOption -HistorySaveStyle SaveNothing
 configure-hapao.ps1 -Repository Z:\Path\To\Repo -AccessKey KEY -SecretKey KEY
 ```
 
+or use CSV file with credentials exported from AWS
+
+```ps
+configure-hapao.ps1 -Repository Z:\Path\To\Repo -AccessKeysCsv Z:\Path\To\AccessKeys.csv
+```
+
 the script will ask interactively if the options were not provided

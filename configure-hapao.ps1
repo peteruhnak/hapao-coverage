@@ -1,7 +1,10 @@
+[CmdletBinding(DefaultParameterSetName="A")]
+
 param (
     [Parameter(Mandatory=$true)][string] $Repository,
-    [Parameter(Mandatory=$true)][string] $AccessKey,
-    [Parameter(Mandatory=$true)][string] $SecretKey
+    [Parameter(Mandatory=$true, ParameterSetName="A")][string] $AccessKey,
+    [Parameter(Mandatory=$true, ParameterSetName="A")][string] $SecretKey,
+    [Parameter(Mandatory=$true, ParameterSetName="B")][string] $AccessKeysCsv
 )
 
 function Encrypt($Key) {
@@ -9,6 +12,12 @@ function Encrypt($Key) {
     $Encrypted = Invoke-Expression "travis encrypt $Key"
     Pop-Location
     return $Encrypted
+}
+
+if ($AccessKeysCsv) {
+    $Contents = (Import-Csv $AccessKeysCsv -Header @("id", "key"))[-1]
+    $AccessKey = $Contents.id
+    $SecretKey = $Contents.key
 }
 
 $EncAccessKey = Encrypt($AccessKey)
