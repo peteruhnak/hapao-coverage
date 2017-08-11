@@ -24,6 +24,7 @@ conf := SmalltalkCISpec fromStream: confFile readStream.
 runCoverage := [ :runName :pkgs | |coverage view pkgDir|
 	coverage := Hapao2 runTestsForPackages: pkgs.
 	view := RTView new.
+	view canvas theme: TRWhiteTheme new.
 	view @ RTDraggableView @ RTZoomableView.
 	coverage visualizeOn: view.
 	pkgDir := coverageDir / runName.
