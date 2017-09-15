@@ -16,13 +16,34 @@ run_coverage() {
 	$SMALLTALK_VM $COVERAGE_IMAGE eval "
 |buildDir coverageDir confFile conf runCoverage pkgsMatching|
 (Smalltalk hasClassNamed: #RTView)
-	ifTrue: [ (Gofer new smalltalkhubUser: 'ObjectProfile' project: 'Spy2')
-	package: 'Spy2-Core';
-	package: 'Spy2-Visualization';
-	package: 'Spy2-Hapao-Core';
-	package: 'Spy2-Hapao-Visualization';
-	load ]
-	ifFalse: [ Gofer new smalltalkhubUser: 'ObjectProfile' project: 'Spy2'; configurationOf: 'Spy2'; loadBleedingEdge ].
+	ifFalse: [ |packages base|
+		packages := #(
+			'Trachel-akevalion.421.mcz'
+			'Roassal2-PavelKrivanek.1693.mcz'
+		).
+		base := 'https://dztm7az76bgwm.cloudfront.net/roassal2'.
+		packages do: [ :each | |response|
+			response := ZnEasy get: base, '/', each.
+			MczInstaller installStream: response entity readStream.
+		].
+		#RTAbstractInteractionView asClass subclass: #RTFindInAView.
+		#RTFindInAView asClass compile: 'initializeElement: aView'.
+	].
+(Smalltalk hasClassNamed: #Hapao2)
+	ifFalse: [ |packages base|
+		packages := #(
+			'Spy2-Core-AlejandroInfante.41.mcz'
+			'Spy2-Visualization-AlexandreBergel.7.mcz'
+			'Spy2-Hapao-Core-AlejandroInfante.16.mcz'
+			'Spy2-Hapao-Visualization-AlejandroInfante.19.mcz'
+		).
+		base := 'https://dztm7az76bgwm.cloudfront.net/hapao'.
+		packages do: [ :each | |response|
+			response := ZnEasy get: base, '/', each.
+			MczInstaller installStream: response entity readStream.
+		].
+	].
+
 buildDir := '$BUILD_DIR' asFileReference.
 coverageDir := buildDir / 'coverage-result'.
 confFile := buildDir / '.smalltalk.ston'.
