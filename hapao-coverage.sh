@@ -87,8 +87,16 @@ conf coverageDictionary at: #packages ifPresent: [ :pkgNames |
 }
 
 main() {
-	copy_image
-	run_coverage
+	travis_fold start copy_image "Copying image for coverage..."
+		timer_start
+		copy_image
+		timer_finish
+	travis_fold end copy_image
+	travis_fold start copy_image "Running hapao coverage..."
+		timer_start
+		run_coverage
+		timer_finish
+	travis_fold end copy_image
 }
 
 main
