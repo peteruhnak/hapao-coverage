@@ -15,7 +15,14 @@ copy_image() {
 run_coverage() {
 	$SMALLTALK_VM $COVERAGE_IMAGE eval "
 |buildDir coverageDir confFile conf runCoverage pkgsMatching|
-Gofer new smalltalkhubUser: 'ObjectProfile' project: 'Spy2'; configurationOf: 'Spy2'; loadBleedingEdge.
+(Smalltalk hasClassNamed: #RTView)
+	ifTrue: [ (Gofer new smalltalkhubUser: 'ObjectProfile' project: 'Spy2')
+	package: 'Spy2-Core';
+	package: 'Spy2-Visualization';
+	package: 'Spy2-Hapao-Core';
+	package: 'Spy2-Hapao-Visualization';
+	load ]
+	ifFalse: [ Gofer new smalltalkhubUser: 'ObjectProfile' project: 'Spy2'; configurationOf: 'Spy2'; loadBleedingEdge ].
 buildDir := '$BUILD_DIR' asFileReference.
 coverageDir := buildDir / 'coverage-result'.
 confFile := buildDir / '.smalltalk.ston'.
