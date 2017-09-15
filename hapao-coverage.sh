@@ -17,6 +17,10 @@ run_coverage() {
 |buildDir coverageDir confFile conf runCoverage pkgsMatching|
 (Smalltalk hasClassNamed: #RTView)
 	ifFalse: [ |packages base|
+		Metacello new
+			baseline: 'Geometry';
+			repository: 'github://peteruhnak/geometry/repository';
+			load.
 		packages := #(
 			'Trachel-akevalion.421.mcz'
 			'Roassal2-PavelKrivanek.1693.mcz'
