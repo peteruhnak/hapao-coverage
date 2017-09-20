@@ -28,7 +28,7 @@ run_coverage() {
 		base := 'https://dztm7az76bgwm.cloudfront.net/roassal2'.
 		packages do: [ :each | |response|
 			response := ZnEasy get: base, '/', each.
-			MczInstaller installStream: response entity readStream.
+			[ MczInstaller installStream: response entity readStream ] on: Notification do: [ "ignore warnings" ].
 		].
 		#RTAbstractInteractionView asClass subclass: #RTFindInAView.
 		#RTFindInAView asClass compile: 'initializeElement: aView'.
@@ -44,7 +44,7 @@ run_coverage() {
 		base := 'https://dztm7az76bgwm.cloudfront.net/hapao'.
 		packages do: [ :each | |response|
 			response := ZnEasy get: base, '/', each.
-			MczInstaller installStream: response entity readStream.
+			[ MczInstaller installStream: response entity readStream ] on: Notification do: [ "ignore warnings" ].
 		].
 	].
 
@@ -87,16 +87,16 @@ conf coverageDictionary at: #packages ifPresent: [ :pkgNames |
 }
 
 main() {
-	travis_fold start copy_image "Copying image for coverage..."
-		timer_start
+	#travis_fold start copy_image "Copying image for coverage..."
+	#	timer_start
 		copy_image
-		timer_finish
-	travis_fold end copy_image
-	travis_fold start copy_image "Running hapao coverage..."
-		timer_start
+	#	timer_finish
+	#travis_fold end copy_image
+	#travis_fold start copy_image "Running hapao coverage..."
+	#	timer_start
 		run_coverage
-		timer_finish
-	travis_fold end copy_image
+	#	timer_finish
+	#travis_fold end copy_image
 }
 
 main
