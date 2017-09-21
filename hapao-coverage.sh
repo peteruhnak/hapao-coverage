@@ -14,8 +14,8 @@ copy_image() {
 
 get_hapao_cache() {
 	wget https://dztm7az76bgwm.cloudfront.net/hapao/hapao-package-cache.zip -O hapao-package-cache.zip
-	unzip hapao-package-cache.zip -d $SMALLTALK_CI_BUILD_BASE/pharo-local/package-cache
-	rm hapao-package-cache.zip
+	unzip hapao-package-cache.zip
+	cp -rv hapao-package-cache/* $SMALLTALK_CI_BUILD_BASE/pharo-local/package-cache
 }
 
 run_coverage() {
