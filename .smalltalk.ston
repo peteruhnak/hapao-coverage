@@ -1,0 +1,15 @@
+SmalltalkCISpec {
+	#loading : [
+		SCIMetacelloLoadSpec {
+			#baseline : 'HapaoCoverageTest',
+			#directory : 'repository',
+			#platforms : [ #pharo ]
+		}
+	],
+	#testing : {
+		#packages : [ 'HapaoCoverageTest' ],
+		#coverage : {
+			#packages : [ 'HapaoCoverageTest' ]
+		}
+	}
+}
