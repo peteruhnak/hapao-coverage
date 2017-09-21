@@ -28,7 +28,7 @@ run_coverage() {
 		base := 'https://dztm7az76bgwm.cloudfront.net/roassal2'.
 		packages do: [ :each | |response|
 			response := ZnEasy get: base, '/', each.
-			[ MczInstaller installStream: response entity readStream ] on: Notification do: [ ].
+			MczInstaller installStream: response entity readStream.
 		].
 		#RTAbstractInteractionView asClass subclass: #RTFindInAView.
 		#RTFindInAView asClass compile: 'initializeElement: aView'.
@@ -44,7 +44,7 @@ run_coverage() {
 		base := 'https://dztm7az76bgwm.cloudfront.net/hapao'.
 		packages do: [ :each | |response|
 			response := ZnEasy get: base, '/', each.
-			[ MczInstaller installStream: response entity readStream ] on: Notification do: [ ].
+			MczInstaller installStream: response entity readStream.
 		].
 	].
 
