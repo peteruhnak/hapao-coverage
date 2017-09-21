@@ -12,6 +12,12 @@ copy_image() {
 	$SMALLTALK_VM $SMALLTALK_CI_IMAGE save coverage
 }
 
+get_hapao_cache() {
+	wget https://dztm7az76bgwm.cloudfront.net/hapao/hapao-package-cache.zip -O hapao-package-cache.zip
+	unzip hapao-package-cache.zip -d $SMALLTALK_CI_BUILD_BASE/pharo-local/package-cache
+	rm hapao-package-cache.zip
+}
+
 run_coverage() {
 	$SMALLTALK_VM $COVERAGE_IMAGE eval "
 |buildDir coverageDir confFile conf runCoverage pkgsMatching|
@@ -59,6 +65,7 @@ conf coverageDictionary at: #packages ifPresent: [ :pkgNames |
 
 main() {
 	copy_image
+	get_hapao_cache
 	run_coverage
 }
 
