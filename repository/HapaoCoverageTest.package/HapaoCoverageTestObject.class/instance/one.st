@@ -1,0 +1,3 @@
+constants
+one
+	^ 1
