@@ -5,19 +5,6 @@ Package cache included.
 
 Experimental... anything can change at any moment.
 
-## Package Cache
-
-configure package cache (.mcz files are preserved between builds)
-
-```yaml
-cache:
-  directories:
-    $HOME/package-cache
-
-before_script:
-  - wget -O- https://raw.githubusercontent.com/peteruhnak/hapao-coverage/master/package-cache.sh | bash
-```
-
 ## Hapao Coverage
 
 hapao: http://hapao.dcc.uchile.cl/ , http://forum.world.st/ANN-Test-Coverage-with-Hapao-td4778403.html
@@ -76,10 +63,7 @@ smalltalk:
 
 cache:
   directories:
-    $HOME/package-cache
-
-before_script:
-  - wget -O- https://raw.githubusercontent.com/peteruhnak/hapao-coverage/master/package-cache.sh | bash
+    - $SMALLTALK_CI_BUILD_BASE/pharo-local/package-cache
 
 after_success:
   - wget -O- https://raw.githubusercontent.com/peteruhnak/hapao-coverage/master/hapao-coverage.sh | bash
